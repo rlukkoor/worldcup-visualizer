@@ -198,22 +198,24 @@ nav button:hover {
   color: var(--text-muted);
 }
 
-/* Persistent Active State Highlights */
+/* --- Active State Locks & Hover Overrides --- */
+
+/* Targets Main Nav, Confederation Filters, and Tournament Year Buttons */
 nav button.active,
 .filter-bar .filter-btn.active,
 #years-buttons .year-btn.active {
   background: var(--primary) !important;
   border-color: var(--primary) !important;
   color: #ffffff !important;
+  opacity: 1 !important;
 }
 
-/* Force solid high-priority background highlight on active class injection */
-button.active, 
-.nav-btn.active, 
-.filter-btn.active, 
-.year-btn.active {
-  background-color: var(--primary, #0070f3) !important;
-  border-color: var(--primary, #0070f3) !important;
+/* Prevents active buttons from flickering or changing style when hovered */
+nav button.active:hover,
+.filter-bar .filter-btn.active:hover,
+#years-buttons .year-btn.active:hover {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
   color: #ffffff !important;
-  opacity: 1 !important;
+  opacity: 0.9 !important;
 }
