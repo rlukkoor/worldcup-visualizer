@@ -197,3 +197,12 @@ nav button:hover {
   padding: 50px 20px;
   color: var(--text-muted);
 }
+
+/* Persistent Active State Highlights */
+nav button.active,
+.filter-bar .filter-btn.active,
+#years-buttons .year-btn.active {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #ffffff !important;
+}
