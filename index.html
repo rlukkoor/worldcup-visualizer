@@ -40,6 +40,12 @@
     <!-- 2. Historical Tournament Timeline View -->
     <section id="years-view" class="hidden">
       <div id="years-buttons" class="years-buttons"></div>
+
+      <div class="timeline-tabs" id="timeline-sub-navigation">
+        <button id="tab-timeline-alpha" class="active" onclick="switchTimelineSubView('alpha', this)">Alphabetical</button>
+        <button id="tab-timeline-confed" onclick="switchTimelineSubView('confed', this)">By Confederation</button>
+        <button id="tab-timeline-third" onclick="switchTimelineSubView('third', this)">By Finish/Stage</button>
+      </div>
       
       <div id="year-details" class="year-details hidden">
         <div class="timeline-header-row">
