@@ -190,14 +190,14 @@ let currentView = 'members';
 let activeConfedFilter = 'ALL';
 let currentChart = null;
 
-// The complete array of calendar tournament stages since 1930 (ordered chronologically)
+// The complete array of calendar tournament stages since 1930
 const allYears = [
   1930, 1934, 1938, 1942, 1946, 1950, 1954, 1958, 1962, 1966, 
   1970, 1974, 1978, 1982, 1986, 1990, 1994, 1998, 2002, 2006, 
   2010, 2014, 2018, 2022, 2026
 ];
 
-// Human-readable names describing what historical metrics point values map to
+// Human-readable names describing finishing stages
 const stageNames = {
   0: 'Did Not Participate',
   1: 'Group Stage',
@@ -214,20 +214,77 @@ document.addEventListener('DOMContentLoaded', () => {
   filterConfed('ALL');
 });
 
-function switchView(viewName) {
-  currentView = viewName;
-  const membersView = document.getElementById('members-view');
-  const yearsView = document.getElementById('years-view');
-
-  if (viewName === 'members') {
-    membersView.classList.remove('hidden');
-    yearsView.classList.add('hidden');
+// Generic helper function to clear out older active selections and freeze highlights
+function handleActiveHighlight(selectorOrGroup, targetButton) {
+  let itemGroup;
+  if (typeof selectorOrGroup === 'string') {
+    itemGroup = document.querySelectorAll(selectorOrGroup);
   } else {
-    yearsView.classList.remove('hidden');
-    membersView.classList.add('hidden');
+    itemGroup = selectorOrGroup.children;
+  }
+  
+  Array.from(itemGroup).forEach(btn => btn.classList.remove('active'));
+  if (targetButton) {
+    targetButton.classList.add('active');
   }
 }
 
+// 1. View Switcher with locked navigation highlighting
+function switchView(viewName) {
+  currentView = viewName;
+  const membersSection = document.getElementById('members-view');
+  const yearsSection = document.getElementById('years-view');
+
+  if (viewName === 'members') {
+    membersSection.classList.remove('hidden');
+    yearsSection.classList.add('hidden');
+  } else {
+    yearsSection.classList.remove('hidden');
+    membersSection.classList.add('hidden');
+  }
+
+  // Find and lock the styling for the clicked view toggle tab button
+  const targetNavBtn = Array.from(document.querySelectorAll('.nav-tabs .nav-btn')).find(
+    btn => btn.getAttribute('onclick').includes(`'${viewName}'`)
+  );
+  if (targetNavBtn) {
+    handleActiveHighlight('.nav-tabs .nav-btn', targetNavBtn);
+  }
+}
+
+// 2. Confederation Filter with locked navigation highlighting
+function filterConfed(confedCode) {
+  activeConfedFilter = confedCode;
+
+  // Track down and freeze focus on the targeted filter button
+  const targetFilterBtn = Array.from(document.querySelectorAll('.filter-container .filter-btn')).find(
+    btn => btn.getAttribute('onclick').includes(`'${confedCode}'`)
+  );
+  if (targetFilterBtn) {
+    handleActiveHighlight('.filter-container .filter-btn', targetFilterBtn);
+  }
+
+  const gridElement = document.getElementById('flag-grid');
+  if (!gridElement) return;
+  gridElement.innerHTML = '';
+
+  Object.keys(wcData.countries).forEach(key => {
+    const country = wcData.countries[key];
+    if (confedCode !== 'ALL' && country.confed !== confedCode) return;
+
+    const card = document.createElement('div');
+    card.className = 'flag-card';
+    card.onclick = () => openCountryModal(key);
+
+    card.innerHTML = `
+      <span class="flag-icon fi fi-${country.flag}"></span>
+      <div class="flag-country-name">${country.name}</div>
+    `;
+    gridElement.appendChild(card);
+  });
+}
+
+// Generates structural timeline elements
 function renderTimelineButtons() {
   const container = document.getElementById('years-buttons');
   if (!container) return;
@@ -249,15 +306,15 @@ function renderTimelineButtons() {
   });
 }
 
+// 3. Year Detail Selector with active timeline button highlights
 function showYearDetails(year, clickedButton) {
   const detailsSection = document.getElementById('year-details');
   const titleElement = document.getElementById('selected-year-title');
   const gridElement = document.getElementById('year-participants');
 
-  // Highlight specific clicked timeline button to reduce confusion
-  document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
+  // Freeze focus state color context around the specific year badge clicked
   if (clickedButton) {
-    clickedButton.classList.add('active');
+    handleActiveHighlight('#years-buttons .year-btn', clickedButton);
   }
 
   gridElement.innerHTML = '';
@@ -270,7 +327,7 @@ function showYearDetails(year, clickedButton) {
     }
   });
 
-  // Dynamically attach count metric in parentheses (e.g. 2026 Tournament Participants (48))
+  // Displays text context using standard format: "2026 Tournament Participants (48)"
   titleElement.textContent = `🏆 ${year} Tournament Participants (${participants.length})`;
 
   if (participants.length === 0) {
@@ -297,37 +354,6 @@ function showYearDetails(year, clickedButton) {
   }
 
   detailsSection.classList.remove('hidden');
-}
-
-function filterConfed(confedCode) {
-  activeConfedFilter = confedCode;
-
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    if (btn.getAttribute('onclick').includes(`'${confedCode}'`)) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-
-  const gridElement = document.getElementById('flag-grid');
-  if (!gridElement) return;
-  gridElement.innerHTML = '';
-
-  Object.keys(wcData.countries).forEach(key => {
-    const country = wcData.countries[key];
-    if (confedCode !== 'ALL' && country.confed !== confedCode) return;
-
-    const card = document.createElement('div');
-    card.className = 'flag-card';
-    card.onclick = () => openCountryModal(key);
-
-    card.innerHTML = `
-      <span class="flag-icon fi fi-${country.flag}"></span>
-      <div class="flag-country-name">${country.name}</div>
-    `;
-    gridElement.appendChild(card);
-  });
 }
 
 function openCountryModal(countryKey) {
