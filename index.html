@@ -44,19 +44,12 @@
       <div class="timeline-tabs" id="timeline-sub-navigation">
         <button id="tab-timeline-alpha" class="active" onclick="switchTimelineSubView('alpha', this)">Alphabetical</button>
         <button id="tab-timeline-confed" onclick="switchTimelineSubView('confed', this)">By Confederation</button>
-        <button id="tab-timeline-third" onclick="switchTimelineSubView('third', this)">By Finish/Stage</button>
+        <button id="tab-timeline-third" onclick="switchTimelineSubView('group', this)">Group Stage</button>
       </div>
       
       <div id="year-details" class="year-details hidden">
         <div class="timeline-header-row">
           <h2 id="selected-year-title">🏆 Tournament Participants</h2>
-          
-          <!-- Sub-view Filtering Tabs inside Timeline -->
-          <div class="timeline-tabs">
-            <button id="tab-timeline-alpha" class="filter-btn active" onclick="switchTimelineSubView('alpha')">Alphabetical</button>
-            <button id="tab-timeline-confed" class="filter-btn" onclick="switchTimelineSubView('confed')">By Confederation</button>
-          </div>
-        </div>
         
         <!-- Target render output zone -->
         <div id="year-participants"></div>
