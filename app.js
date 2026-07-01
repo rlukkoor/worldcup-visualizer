@@ -63,7 +63,7 @@ const wcData = {
     "NED": { name: "Netherlands", flag: "nl", confed: "UEFA", history: { 1934: 1, 1938: 1, 1974: 5, 1978: 5, 1990: 2, 1994: 3, 1998: 4, 2006: 2, 2010: 5, 2014: 4, 2022: 3, 2026: 1 } },
     "MKD": { name: "North Macedonia", flag: "mk", confed: "UEFA", history: {} },
     "NIR": { name: "Northern Ireland", flag: "gb-nir", confed: "UEFA", history: { 1958: 3, 1982: 2, 1986: 1 } },
-    "NOR": { name: "Norway", flag: "no", confed: "UEFA", history: { 1938: 1, 1994: 1, 1998: 2 } },
+    "NOR": { name: "Norway", flag: "no", confed: "UEFA", history: { 1938: 1, 1994: 1, 1998: 2, 2026: 3 } },
     "POL": { name: "Poland", flag: "pl", confed: "UEFA", history: { 1938: 1, 1974: 4, 1978: 3, 1982: 4, 1986: 2, 2002: 1, 2006: 1, 2018: 1, 2022: 2 } },
     "POR": { name: "Portugal", flag: "pt", confed: "UEFA", history: { 1966: 4, 1986: 1, 2002: 1, 2006: 4, 2010: 2, 2014: 1, 2018: 2, 2022: 3, 2026: 1 } },
     "IRL": { name: "Republic of Ireland", flag: "ie", confed: "UEFA", history: { 1990: 3, 1994: 2, 2002: 2 } },
@@ -100,10 +100,10 @@ const wcData = {
     "CHI": { name: "Chile", flag: "cl", confed: "CONMEBOL", history: { 1930: 1, 1950: 1, 1962: 4, 1966: 1, 1974: 1, 1982: 1, 1998: 2, 2010: 2, 2014: 2 } },
     "COL": { name: "Colombia", flag: "co", confed: "CONMEBOL", history: { 1962: 1, 1990: 2, 1994: 1, 1998: 1, 2014: 3, 2018: 2, 2026: 1 } },
     "ECU": { name: "Ecuador", flag: "ec", confed: "CONMEBOL", history: { 2002: 1, 2006: 2, 2014: 1, 2022: 1, 2026: 1 } },
-    "PAR": { name: "Paraguay", flag: "py", confed: "CONMEBOL", history: { 1930: 1, 1950: 1, 1958: 1, 1986: 2, 1998: 2, 2002: 2, 2006: 1, 2010: 3 } },
+    "PAR": { name: "Paraguay", flag: "py", confed: "CONMEBOL", history: { 1930: 1, 1950: 1, 1958: 1, 1986: 2, 1998: 2, 2002: 2, 2006: 1, 2010: 3, 2026: 3 } },
     "PER": { name: "Peru", flag: "pe", confed: "CONMEBOL", history: { 1930: 1, 1970: 3, 1978: 3, 1982: 1, 2018: 1 } },
     "URU": { name: "Uruguay", flag: "uy", confed: "CONMEBOL", history: { 1930: 6, 1950: 6, 1954: 4, 1962: 1, 1966: 3, 1970: 4, 1974: 1, 1986: 2, 1990: 2, 2002: 1, 2010: 4, 2014: 2, 2018: 3, 2022: 1, 2026: 1 } },
-    "VEN": { name: "Venezuela", flag: "ve", confed: "CONMEBOL", history: { 2026: 1 } },
+    "VEN": { name: "Venezuela", flag: "ve", confed: "CONMEBOL", history: {} },
 
     // CONCACAF (35 Members)
     "AIA": { name: "Anguilla", flag: "ai", confed: "CONCACAF", history: {} },
