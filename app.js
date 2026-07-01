@@ -223,8 +223,8 @@ function handleActiveHighlight(allButtonsSelector, targetButton) {
   }
 }
 
-// 1. View Switcher with locked navigation highlighting
-function switchView(viewName) {
+// 1. Safe View Switcher passing element context directly
+function switchView(viewName, clickedButton) {
   currentView = viewName;
   const membersSection = document.getElementById('members-view');
   const yearsSection = document.getElementById('years-view');
@@ -237,11 +237,9 @@ function switchView(viewName) {
     membersSection.classList.add('hidden');
   }
 
-  // Fallback structural finder for header navigation layout buttons
-  let targetNavBtn = null;
-  if (window.event && window.event.target && window.event.target.tagName === 'BUTTON') {
-    targetNavBtn = window.event.target;
-  } else {
+  // Pure fallback: Use the passed button, or find it cleanly by attribute if called programmatically
+  let targetNavBtn = clickedButton;
+  if (!targetNavBtn) {
     targetNavBtn = Array.from(document.querySelectorAll('header nav button')).find(
       btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${viewName}'`)
     );
@@ -249,15 +247,13 @@ function switchView(viewName) {
   handleActiveHighlight('header nav button', targetNavBtn);
 }
 
-// 2. Confederation Filter with locked bar highlighting
-function filterConfed(confedCode) {
+// 2. Safe Confederation Filter passing element context directly
+function filterConfed(confedCode, clickedButton) {
   activeConfedFilter = confedCode;
 
-  // Track down and isolate the specific filter button clicked within the bar container
-  let targetFilterBtn = null;
-  if (window.event && window.event.target && window.event.target.tagName === 'BUTTON') {
-    targetFilterBtn = window.event.target;
-  } else {
+  // Pure fallback: Use the passed button, or find it by attribute matching
+  let targetFilterBtn = clickedButton;
+  if (!targetFilterBtn) {
     targetFilterBtn = Array.from(document.querySelectorAll('.filter-bar button')).find(
       btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${confedCode}'`)
     );
