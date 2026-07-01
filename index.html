@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FIFA World Cup Member Archive</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- Flag Icons CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.2/css/flag-icons.min.css"/>
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -23,7 +21,6 @@
   </header>
 
   <main>
-    <!-- MEMBERS VIEW -->
     <section id="members-view">
       <div class="filter-bar">
         <button class="filter-btn active" onclick="filterConfed('ALL', this)">ALL</button>
@@ -37,11 +34,9 @@
       <div id="flag-grid" class="flag-grid"></div>
     </section>
 
-    <!-- TIMELINE/YEARS VIEW -->
     <section id="years-view" class="hidden">
       <div id="years-buttons" class="years-grid-container"></div>
       
-      <!-- Year Breakdown Details Area -->
       <div id="year-details" class="year-details-card hidden">
         <div class="timeline-header-row">
           <h3 id="selected-year-title">🏆 Tournament Participants</h3>
@@ -51,12 +46,11 @@
             <button id="tab-timeline-group" onclick="switchTimelineSubView('group', this)">Group Stage</button>
           </div>
         </div>
-        <div id="year-participants"></div>
+        <div id="year-participants" class="flag-grid"></div>
       </div>
     </section>
   </main>
 
-  <!-- HISTORICAL PERFORMANCE MODAL OVERLAY -->
   <div id="chart-modal" class="modal-overlay hidden" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div class="modal-header">
