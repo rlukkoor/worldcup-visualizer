@@ -336,3 +336,40 @@ nav button.active:hover,
   color: #fff;
   border-color: #0070f3;
 }
+
+/* Wikipedia-Style Clean Match Standings Table */
+.wiki-standing-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 20px 0;
+  font-size: 0.9rem;
+  background-color: #161616;
+  border: 1px solid #2c2c2c;
+  color: #ccc;
+}
+
+.wiki-standing-table th {
+  background-color: #1e1e1e;
+  color: #888;
+  font-weight: 500;
+  padding: 6px 10px;
+  border: 1px solid #2c2c2c;
+  font-size: 0.85rem;
+}
+
+.wiki-standing-table td {
+  padding: 8px 10px;
+  border: 1px solid #2c2c2c;
+  vertical-align: middle;
+}
+
+/* Bright green tint style highlight for qualification spots */
+.wiki-standing-table tr.advance-row td {
+  background-color: rgba(46, 204, 113, 0.15) !important;
+  color: #fff;
+}
+
+/* Accentuate hover behaviors */
+.wiki-standing-table tr:hover td {
+  background-color: #222;
+}
