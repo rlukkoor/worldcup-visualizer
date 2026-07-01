@@ -1,10 +1,9 @@
-/* Core Variables & Reset */
+/* Core Dark Theme Settings */
 :root {
   --bg-dark: #0b0b0c;
   --panel-bg: #121214;
   --border-color: #222225;
   --accent-blue: #0070f3;
-  --accent-blue-hover: #0051b3;
   --text-main: #f5f5f7;
   --text-muted: #8e8e93;
   --wiki-header: #1f1f23;
@@ -18,20 +17,16 @@
 }
 
 body {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-dark) !important;
+  color: var(--text-main) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   padding-bottom: 60px;
 }
 
-/* Layout Header */
 header {
   background-color: var(--panel-bg);
   border-bottom: 1px solid var(--border-color);
   padding: 15px 30px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .header-container {
@@ -51,15 +46,13 @@ nav .nav-btn {
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s ease;
 }
 
-nav .nav-btn.active, nav .nav-btn:hover {
+nav .nav-btn.active {
   background-color: var(--accent-blue);
   border-color: var(--accent-blue);
 }
 
-/* Main Container Constraints */
 main {
   max-width: 1200px;
   margin: 30px auto;
@@ -70,7 +63,7 @@ main {
   display: none !important;
 }
 
-/* Filter Controls bar */
+/* Filter Controls Row */
 .filter-bar {
   display: flex;
   gap: 10px;
@@ -86,54 +79,53 @@ main {
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
 }
 
-.filter-btn.active, .filter-btn:hover {
+.filter-btn.active {
   background-color: var(--accent-blue);
   color: #fff;
   border-color: var(--accent-blue);
 }
 
-/* Multi-column Grid Framework */
+/* Strict Multi-Column Horizontal Row Grid Arrangement */
 .flag-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
-  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+  gap: 20px !important;
+  width: 100% !important;
 }
 
 .flag-card {
-  background-color: var(--panel-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
+  background-color: var(--panel-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  padding: 20px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  display: block !important;
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .flag-card:hover {
   transform: translateY(-2px);
-  border-color: var(--accent-blue);
+  border-color: var(--accent-blue) !important;
 }
 
 .flag-card .flag-icon {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
+  display: inline-block;
   margin-bottom: 12px;
   border-radius: 4px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
 }
 
 .flag-country-name {
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--text-main);
-  word-wrap: break-word;
 }
 
-/* Timeline Horizontal Layout Matrix */
+/* Timeline Layout Elements */
 .years-grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -147,16 +139,13 @@ main {
   color: var(--text-main);
   padding: 12px 0;
   border-radius: 6px;
-  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .year-btn.active {
-  background-color: var(--accent-blue) !important;
-  border-color: var(--accent-blue) !important;
-  color: #fff !important;
+  background-color: var(--accent-blue);
+  border-color: var(--accent-blue);
 }
 
 .year-btn.cancelled {
@@ -166,13 +155,11 @@ main {
   cursor: not-allowed;
 }
 
-/* Dynamic Details Container */
 .year-details-card {
   background-color: var(--panel-bg);
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 25px;
-  margin-top: 25px;
 }
 
 .timeline-header-row {
@@ -182,8 +169,6 @@ main {
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 15px;
   margin-bottom: 25px;
-  flex-wrap: wrap;
-  gap: 15px;
 }
 
 .timeline-tabs button {
@@ -191,11 +176,9 @@ main {
   border: 1px solid var(--border-color);
   color: var(--text-muted);
   padding: 6px 14px;
-  font-size: 0.85rem;
   cursor: pointer;
   border-radius: 4px;
   margin-left: 6px;
-  font-weight: 500;
 }
 
 .timeline-tabs button.active {
@@ -204,7 +187,7 @@ main {
   border-color: var(--accent-blue);
 }
 
-/* Structural Wikipedia Tables Formats */
+/* Wikipedia Table Framework */
 .wiki-standing-table {
   width: 100%;
   border-collapse: collapse;
@@ -217,7 +200,6 @@ main {
 .wiki-standing-table th {
   background-color: var(--wiki-header);
   color: var(--text-muted);
-  font-weight: 600;
   padding: 10px;
   border: 1px solid var(--border-color);
 }
@@ -233,7 +215,7 @@ main {
   border-left: 3px solid var(--accent-blue);
 }
 
-/* Modals Overlay Settings */
+/* Modal Popup Settings */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -275,8 +257,4 @@ main {
   position: relative;
   height: 350px;
   width: 100%;
-}
-
-.text-muted {
-  color: var(--text-muted);
 }
