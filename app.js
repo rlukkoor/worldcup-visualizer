@@ -320,20 +320,23 @@ function buildTimelineYearButtons() {
   });
 }
 
-function switchTimelineSubView(subView) {
+function switchTimelineSubView(subView, clickedButton) {
   currentTimelineSubView = subView;
   
-  const alphaTab = document.getElementById('tab-timeline-alpha');
-  const confedTab = document.getElementById('tab-timeline-confed');
+  // Dynamically query your timeline presentation control buttons
+  const subViewButtons = document.querySelectorAll('.timeline-tabs button, #timeline-sub-navigation button');
   
-  if (alphaTab && confedTab) {
-    if (subView === 'alpha') {
-      alphaTab.classList.add('active');
-      confedTab.classList.remove('active');
-    } else {
-      confedTab.classList.add('active');
-      alphaTab.classList.remove('active');
-    }
+  // Clean up all active highlights within the timeline nav bar subset
+  subViewButtons.forEach(btn => btn.classList.remove('active'));
+  
+  // Highlight the specifically clicked button to retain its illumination visual state
+  if (clickedButton) {
+    clickedButton.classList.add('active');
+  } else {
+    // Graceful fallback tracker if called without an event context
+    const fallbackId = subView === 'alpha' ? 'tab-timeline-alpha' : (subView === 'confed' ? 'tab-timeline-confed' : 'tab-timeline-third');
+    const fallbackBtn = document.getElementById(fallbackId);
+    if (fallbackBtn) fallbackBtn.classList.add('active');
   }
 
   if (activeSelectedYear) {
@@ -380,7 +383,7 @@ function renderYearParticipants(year) {
       container.appendChild(createParticipantCard(key, year));
     });
 
-  } else {
+  } else if (currentTimelineSubView === 'confed') {
     // Mode B: Split elements vertically by geographical confederation grouping rows stacked downward
     container.className = 'confed-timeline-container';
     
@@ -406,6 +409,10 @@ function renderYearParticipants(year) {
       groupBlock.appendChild(subGrid);
       container.appendChild(groupBlock);
     });
+  } else {
+    // Mode C: Placeholder execution template for your new sub-view filter option
+    container.className = 'flag-grid';
+    container.innerHTML = '<p class="text-muted">Custom layout view logic content will populate here.</p>';
   }
 }
 
