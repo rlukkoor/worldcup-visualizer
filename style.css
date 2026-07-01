@@ -206,3 +206,14 @@ nav button.active,
   border-color: var(--primary) !important;
   color: #ffffff !important;
 }
+
+/* Force solid high-priority background highlight on active class injection */
+button.active, 
+.nav-btn.active, 
+.filter-btn.active, 
+.year-btn.active {
+  background-color: var(--primary, #0070f3) !important;
+  border-color: var(--primary, #0070f3) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
