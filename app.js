@@ -215,15 +215,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Generic helper function to clear out older active selections and freeze highlights
-function handleActiveHighlight(selectorOrGroup, targetButton) {
-  let itemGroup;
-  if (typeof selectorOrGroup === 'string') {
-    itemGroup = document.querySelectorAll(selectorOrGroup);
-  } else {
-    itemGroup = selectorOrGroup.children;
-  }
-  
-  Array.from(itemGroup).forEach(btn => btn.classList.remove('active'));
+function handleActiveHighlight(allButtonsSelector, targetButton) {
+  const buttons = document.querySelectorAll(allButtonsSelector);
+  buttons.forEach(btn => btn.classList.remove('active'));
   if (targetButton) {
     targetButton.classList.add('active');
   }
@@ -243,26 +237,22 @@ function switchView(viewName) {
     membersSection.classList.add('hidden');
   }
 
-  // Find and lock the styling for the clicked view toggle tab button
-  const targetNavBtn = Array.from(document.querySelectorAll('.nav-tabs .nav-btn')).find(
-    btn => btn.getAttribute('onclick').includes(`'${viewName}'`)
+  // Fallback structural finder for top switcher layout buttons
+  const targetNavBtn = Array.from(document.querySelectorAll('nav button, .nav-tabs button, .nav-btn')).find(
+    btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${viewName}'`)
   );
-  if (targetNavBtn) {
-    handleActiveHighlight('.nav-tabs .nav-btn', targetNavBtn);
-  }
+  handleActiveHighlight('nav button, .nav-tabs button, .nav-btn', targetNavBtn);
 }
 
-// 2. Confederation Filter with locked navigation highlighting
+// 2. Confederation Filter with locked bar highlighting
 function filterConfed(confedCode) {
   activeConfedFilter = confedCode;
 
-  // Track down and freeze focus on the targeted filter button
-  const targetFilterBtn = Array.from(document.querySelectorAll('.filter-container .filter-btn')).find(
-    btn => btn.getAttribute('onclick').includes(`'${confedCode}'`)
+  // Resilient query search tracking down the clicked filter item
+  const targetFilterBtn = Array.from(document.querySelectorAll('.filter-bar button, .filter-container button, .filter-btn')).find(
+    btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${confedCode}'`)
   );
-  if (targetFilterBtn) {
-    handleActiveHighlight('.filter-container .filter-btn', targetFilterBtn);
-  }
+  handleActiveHighlight('.filter-bar button, .filter-container button, .filter-btn', targetFilterBtn);
 
   const gridElement = document.getElementById('flag-grid');
   if (!gridElement) return;
@@ -312,10 +302,12 @@ function showYearDetails(year, clickedButton) {
   const titleElement = document.getElementById('selected-year-title');
   const gridElement = document.getElementById('year-participants');
 
-  // Freeze focus state color context around the specific year badge clicked
-  if (clickedButton) {
-    handleActiveHighlight('#years-buttons .year-btn', clickedButton);
+  // Parse layout fallback matching dataset hooks if element context parameter is void
+  let targetBtn = clickedButton;
+  if (!targetBtn) {
+    targetBtn = document.querySelector(`#years-buttons button[data-year="${year}"], .year-btn[data-year="${year}"]`);
   }
+  handleActiveHighlight('#years-buttons button, .year-btn', targetBtn);
 
   gridElement.innerHTML = '';
 
@@ -327,7 +319,6 @@ function showYearDetails(year, clickedButton) {
     }
   });
 
-  // Displays text context using standard format: "2026 Tournament Participants (48)"
   titleElement.textContent = `🏆 ${year} Tournament Participants (${participants.length})`;
 
   if (participants.length === 0) {
