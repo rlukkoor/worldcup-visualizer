@@ -8,7 +8,7 @@ const wcData = {
     "AUT": { name: "Austria", flag: "at", confed: "UEFA", history: { 1934: 4, 1954: 4, 1958: 1, 1978: 3, 1982: 3, 1990: 1, 1998: 1, 2026: 1 } },
     "AZE": { name: "Azerbaijan", flag: "az", confed: "UEFA", history: {} },
     "BLR": { name: "Belarus", flag: "by", confed: "UEFA", history: {} },
-    "BEL": { name: "Belgium", flag: "be", confed: "UEFA", history: { 1930: 1, 1934: 1, 1938: 1, 1954: 1, 1970: 1, 1982: 2, 1986: 4, 1990: 2, 1994: 2, 2002: 2, 2014: 3, 2018: 4, 2022: 1, 2026: 1 } },
+    "BEL": { name: "Belgium", flag: "be", confed: "UEFA", history: { 1930: 1, 1934: 1, 1938: 1, 1954: 1, 1970: 1, 1982: 2, 1986: 4, 1990: 2, 1994: 2, 1998: 1, 2002: 2, 2014: 3, 2018: 4, 2022: 1, 2026: 1 } },
     "BIH": { name: "Bosnia and Herzegovina", flag: "ba", confed: "UEFA", history: { 2014: 1, 2026: 1 } },
     "BUL": { name: "Bulgaria", flag: "bg", confed: "UEFA", history: { 1962: 1, 1966: 1, 1970: 1, 1974: 1, 1986: 2, 1994: 4, 1998: 1 } },
     "CRO": { name: "Croatia", flag: "hr", confed: "UEFA", history: { 1998: 4, 2002: 1, 2006: 1, 2014: 1, 2018: 5, 2022: 4, 2026: 1 } },
@@ -46,7 +46,7 @@ const wcData = {
     "HUN": { name: "Hungary", flag: "hu", confed: "UEFA", history: { 1934: 3, 1938: 5, 1954: 5, 1958: 1, 1962: 3, 1966: 3, 1978: 1, 1982: 1, 1986: 1 } },
     "ISL": { name: "Iceland", flag: "is", confed: "UEFA", history: { 2018: 1 } },
     "ISR": { name: "Israel", flag: "il", confed: "UEFA", history: { 1970: 1 } },
-    "ITA": { name: "Italy", flag: "it", confed: "UEFA", history: { 1934: 6, 1938: 6, 1950: 1, 1954: 1, 1962: 1, 1966: 1, 1970: 5, 1974: 1, 1978: 4, 1982: 6, 1990: 4, 1994: 5, 1998: 3, 2002: 2, 2006: 6, 2010: 1, 2014: 1 } },
+    "ITA": { name: "Italy", flag: "it", confed: "UEFA", history: { 1934: 6, 1938: 6, 1950: 1, 1954: 1, 1962: 1, 1966: 1, 1970: 5, 1974: 1, 1978: 4, 1982: 6, 1986: 2, 1990: 4, 1994: 5, 1998: 3, 2002: 2, 2006: 6, 2010: 1, 2014: 1 } },
     "KAZ": { name: "Kazakhstan", flag: "kz", confed: "UEFA", history: {} },
     "KOS": { name: "Kosovo", flag: "xk", confed: "UEFA", history: {} },
     "LVA": { name: "Latvia", flag: "lv", confed: "UEFA", history: {} },
@@ -138,7 +138,8 @@ const wcData = {
 
     // --- CAF (Africa) ---
     "ALG": { name: "Algeria", flag: "dz", confed: "CAF", history: { 1982: 1, 1986: 1, 2010: 1, 2014: 2, 2026: 1 } },
-    "CMR": { name: "Camperoon", flag: "cm", confed: "CAF", history: { 1982: 1, 1990: 3, 1994: 1, 1998: 1, 2002: 1, 2010: 1, 2014: 1, 2022: 1 } },
+    "ANG": { name: "Angola", flag: "ao", confed: "CAF", history: { 2006: 1 } },
+    "CMR": { name: "Cameroon", flag: "cm", confed: "CAF", history: { 1982: 1, 1990: 3, 1994: 1, 1998: 1, 2002: 1, 2010: 1, 2014: 1, 2022: 1 } },
     "CPV": { name: "Cape Verde", flag: "cv", confed: "CAF", history: { 2026: 1 } },
     "COD": { 
       name: "DR Congo", 
@@ -154,10 +155,12 @@ const wcData = {
     "NGA": { name: "Nigeria", flag: "ng", confed: "CAF", history: { 1994: 2, 1998: 2, 2002: 1, 2010: 1, 2014: 2, 2018: 1 } },
     "SEN": { name: "Senegal", flag: "sn", confed: "CAF", history: { 2002: 3, 2018: 1, 2022: 2, 2026: 1 } },
     "RSA": { name: "South Africa", flag: "za", confed: "CAF", history: { 1998: 1, 2002: 1, 2010: 1, 2026: 1 } },
+    "TOG": { name: "Togo", flag: "tg", confed: "CAF", history: { 2006: 1 } },
     "TUN": { name: "Tunisia", flag: "tn", confed: "CAF", history: { 1978: 1, 1998: 1, 2002: 1, 2006: 1, 2018: 1, 2022: 1, 2026: 1 } },
 
     // --- AFC (Asia) ---
     "AUS": { name: "Australia", flag: "au", confed: "AFC", history: { 1974: 1, 2006: 2, 2010: 1, 2014: 1, 2018: 1, 2022: 2, 2026: 1 } },
+    "CHN": { name: "China", flag: "cn", confed: "AFC", history: { 2002: 1 } },
     "IDN": { 
       name: "Indonesia", 
       flag: "id", 
@@ -169,9 +172,12 @@ const wcData = {
     "IRQ": { name: "Iraq", flag: "iq", confed: "AFC", history: { 1986: 1, 2026: 1 } },
     "JPN": { name: "Japan", flag: "jp", confed: "AFC", history: { 1998: 1, 2002: 2, 2006: 1, 2010: 2, 2014: 1, 2018: 2, 2022: 2, 2026: 1 } },
     "JOR": { name: "Jordan", flag: "jo", confed: "AFC", history: { 2026: 1 } },
+    "KUW": { name: "Kuwait", flag: "kw", confed: "AFC", history: { 1982: 1 } },
+    "PRK": { name: "North Korea", flag: "kp", confed: "AFC", history: { 1966: 3, 2010: 1 } },
     "QAT": { name: "Qatar", flag: "qa", confed: "AFC", history: { 2022: 1, 2026: 1 } },
     "KOR": { name: "South Korea", flag: "kr", confed: "AFC", history: { 1954: 1, 1986: 1, 1990: 1, 1994: 1, 1998: 1, 2002: 4, 2006: 1, 2010: 2, 2014: 1, 2018: 1, 2022: 2, 2026: 1 } },
-    "KSA": { name: "Saudi Arabia", flag: "sa", confed: "AFC", history: { 1994: 2, 1998: 1, 2002: 1, 2006: 1, 2018: 1, 2022: 1 } },
+    "KSA": { name: "Saudi Arabia", flag: "sa", confed: "AFC", history: { 1994: 2, 1998: 1, 2002: 1, 2006: 1, 2018: 1, 2022: 1, 2026: 1 } },
+    "UAE": { name: "United Arab Emirates", flag: "ae", confed: "AFC", history: { 1990: 1 } },
     "UZB": { name: "Uzbekistan", flag: "uz", confed: "AFC", history: { 2026: 1 } },
 
     // --- OFC (Oceania) ---
@@ -230,24 +236,30 @@ function renderTimelineButtons() {
   allYears.forEach(year => {
     const button = document.createElement('button');
     button.className = 'year-btn';
+    button.setAttribute('data-year', year);
     button.textContent = year;
 
     if (year === 1942 || year === 1946) {
       button.classList.add('cancelled');
       button.title = `The ${year} tournament was cancelled due to World War II.`;
     } else {
-      button.onclick = () => showYearDetails(year);
+      button.onclick = () => showYearDetails(year, button);
     }
     container.appendChild(button);
   });
 }
 
-function showYearDetails(year) {
+function showYearDetails(year, clickedButton) {
   const detailsSection = document.getElementById('year-details');
   const titleElement = document.getElementById('selected-year-title');
   const gridElement = document.getElementById('year-participants');
 
-  titleElement.textContent = `🏆 ${year} Tournament Participants`;
+  // Highlight specific clicked timeline button to reduce confusion
+  document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
+  if (clickedButton) {
+    clickedButton.classList.add('active');
+  }
+
   gridElement.innerHTML = '';
 
   const participants = [];
@@ -257,6 +269,9 @@ function showYearDetails(year) {
       participants.push({ key: key, data: country });
     }
   });
+
+  // Dynamically attach count metric in parentheses (e.g. 2026 Tournament Participants (48))
+  titleElement.textContent = `🏆 ${year} Tournament Participants (${participants.length})`;
 
   if (participants.length === 0) {
     gridElement.innerHTML = '<p class="text-muted">No participant details matching this tournament timeline record.</p>';
