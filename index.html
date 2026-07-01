@@ -4,18 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FIFA World Cup Member Archive</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Flag Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.2/css/flag-icons.min.css"/>
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
   <header>
     <div class="header-container">
-      <h1>🌍 FIFA Member Dataset</h1>
+      <h2>🌍 FIFA Member Dataset</h2>
       <nav>
         <button class="nav-btn active" onclick="switchView('members', this)">Members</button>
         <button class="nav-btn" onclick="switchView('years', this)">Timeline</button>
@@ -24,6 +23,7 @@
   </header>
 
   <main>
+    <!-- MEMBERS VIEW -->
     <section id="members-view">
       <div class="filter-bar">
         <button class="filter-btn active" onclick="filterConfed('ALL', this)">ALL</button>
@@ -37,30 +37,32 @@
       <div id="flag-grid" class="flag-grid"></div>
     </section>
 
-    <!-- 2. Historical Tournament Timeline View -->
+    <!-- TIMELINE/YEARS VIEW -->
     <section id="years-view" class="hidden">
-      <div id="years-buttons" class="years-buttons"></div>
-
-      <div class="timeline-tabs" id="timeline-sub-navigation">
-        <button id="tab-timeline-alpha" class="active" onclick="switchTimelineSubView('alpha', this)">Alphabetical</button>
-        <button id="tab-timeline-confed" onclick="switchTimelineSubView('confed', this)">By Confederation</button>
-        <button id="tab-timeline-third" onclick="switchTimelineSubView('group', this)">Group Stage</button>
-      </div>
+      <div id="years-buttons" class="years-grid-container"></div>
       
-      <div id="year-details" class="year-details hidden">
+      <!-- Year Breakdown Details Area -->
+      <div id="year-details" class="year-details-card hidden">
         <div class="timeline-header-row">
-          <h2 id="selected-year-title">🏆 Tournament Participants</h2>
-        
-        <!-- Target render output zone -->
+          <h3 id="selected-year-title">🏆 Tournament Participants</h3>
+          <div class="timeline-tabs">
+            <button id="tab-timeline-alpha" class="active" onclick="switchTimelineSubView('alpha', this)">Alphabetical</button>
+            <button id="tab-timeline-confed" onclick="switchTimelineSubView('confed', this)">By Confederation</button>
+            <button id="tab-timeline-group" onclick="switchTimelineSubView('group', this)">Group Stage</button>
+          </div>
+        </div>
         <div id="year-participants"></div>
       </div>
     </section>
   </main>
 
-  <div id="chart-modal" class="modal hidden" onclick="if(event.target === this) closeModal()">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h2 id="modal-country-name">Country Performance History</h2>
+  <!-- HISTORICAL PERFORMANCE MODAL OVERLAY -->
+  <div id="chart-modal" class="modal-overlay hidden" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modal-country-name">Country Performance</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
       <div class="chart-container">
         <canvas id="historyChart"></canvas>
       </div>
