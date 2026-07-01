@@ -37,12 +37,23 @@
       <div id="flag-grid" class="flag-grid"></div>
     </section>
 
+    <!-- 2. Historical Tournament Timeline View -->
     <section id="years-view" class="hidden">
       <div id="years-buttons" class="years-buttons"></div>
       
       <div id="year-details" class="year-details hidden">
-        <h2 id="selected-year-title">🏆 Tournament Participants</h2>
-        <div id="year-participants" class="flag-grid"></div>
+        <div class="timeline-header-row">
+          <h2 id="selected-year-title">🏆 Tournament Participants</h2>
+          
+          <!-- Sub-view Filtering Tabs inside Timeline -->
+          <div class="timeline-tabs">
+            <button id="tab-timeline-alpha" class="filter-btn active" onclick="switchTimelineSubView('alpha')">Alphabetical</button>
+            <button id="tab-timeline-confed" class="filter-btn" onclick="switchTimelineSubView('confed')">By Confederation</button>
+          </div>
+        </div>
+        
+        <!-- Target render output zone -->
+        <div id="year-participants"></div>
       </div>
     </section>
   </main>
