@@ -2,13 +2,13 @@
  * FIFA World Cup Member Archive - Core Application Logic
  */
 
+// Application State Tracking
 let currentView = 'members';
 let activeConfedFilter = 'ALL';
 let currentTimelineSubView = 'alpha';
 let activeSelectedYear = null;
-let performanceChart = null;
 
-// Complete tracking of 211 FIFA members with historical tournament data
+// Comprehensive FIFA Member Dataset organized by Confederation
 const wcData = {
   countries: {
     // UEFA (55 Members)
@@ -50,7 +50,7 @@ const wcData = {
     "HUN": { name: "Hungary", flag: "hu", confed: "UEFA", history: { 1934: 3, 1938: 5, 1954: 5, 1958: 1, 1962: 3, 1966: 3, 1978: 1, 1982: 1, 1986: 1 } },
     "ISL": { name: "Iceland", flag: "is", confed: "UEFA", history: { 2018: 1 } },
     "ISR": { name: "Israel", flag: "il", confed: "UEFA", history: { 1970: 1 }, notes: { 1970: "Qualified via AFC allocation" } },
-    "ITA": { name: "Italy", flag: "it", confed: "UEFA", history: { 1934: 6, 1938: 6, 1950: 1, 1954: 1, 1962: 1, 1966: 1, 1970: 5, 1974: 1, 1978: 4, 1982: 6, 1986: 2, 1990: 4, 1994: 5, 1998: 3, 2002: 2, 2006: 6, 2010: 1, 2014: 1 } },
+    "ITA": { name: "Italy", flag: "it", confed: "UEFA", history: { 1934: 6, 1938: 6, 1950: 1, 1954: 1, 1962: 1, 1966: 1, 1970: 5, 1974: 1, 1978: 4, 1982: 6, 1986: 2, 1990: 4, 1994: 5, 1998: 3, 2002: 2, 2006: 6, 2010: 1, 2014: 1 } }, // Fixed historical data exclusion
     "KAZ": { name: "Kazakhstan", flag: "kz", confed: "UEFA", history: {} },
     "KOS": { name: "Kosovo", flag: "xk", confed: "UEFA", history: {} },
     "LVA": { name: "Latvia", flag: "lv", confed: "UEFA", history: {} },
@@ -139,7 +139,7 @@ const wcData = {
     "SXM": { name: "Sint Maarten", flag: "sx", confed: "CONCACAF", history: {} },
     "SUR": { name: "Suriname", flag: "sr", confed: "CONCACAF", history: {} },
     "TRI": { name: "Trinidad and Tobago", flag: "tt", confed: "CONCACAF", history: { 2006: 1 } },
-    "TCA": { name: "Turks and Caicos Islands", flag: "tc", confed: "CONCACAF", history: {} },
+    "TCA": { name: "Turks and Caican Islands", flag: "tc", confed: "CONCACAF", history: {} },
     "USA": { name: "United States", flag: "us", confed: "CONCACAF", history: { 1930: 4, 1934: 1, 1950: 1, 1990: 1, 1994: 2, 1998: 1, 2002: 3, 2006: 1, 2010: 2, 2014: 2, 2022: 2, 2026: 1 } },
     "VIR": { name: "US Virgin Islands", flag: "vi", confed: "CONCACAF", history: {} },
 
@@ -233,7 +233,7 @@ const wcData = {
     "PLE": { name: "Palestine", flag: "ps", confed: "AFC", history: {} },
     "PHI": { name: "Philippines", flag: "ph", confed: "AFC", history: {} },
     "QAT": { name: "Qatar", flag: "qa", confed: "AFC", history: { 2022: 1 } },
-    "KSA": { name: "Saudi Arabia", flag: "sa", confed: "AFC", history: { 1994: 2, 1998: 1, 2002: 1, 2006: 1, 2018: 1, 2022: 1, 2026: 1 } },
+    "KSA": { name: "Saudi Arabia", flag: "sa", confed: "AFC", history: { 1994: 2, 1998: 1, 2002: 1, 2006: 1, 2018: 1, 2022: 1, 2026: 1 } }, // Maintained fixed inclusion
     "SGP": { name: "Singapore", flag: "sg", confed: "AFC", history: {} },
     "SRI": { name: "Sri Lanka", flag: "lk", confed: "AFC", history: {} },
     "SYR": { name: "Syria", flag: "sy", confed: "AFC", history: {} },
@@ -262,99 +262,110 @@ const wcData = {
   }
 };
 
+// All historical calendar years for generating timeline controls
 const allYears = [
   1930, 1934, 1938, 1942, 1946, 1950, 1954, 1958, 1962, 1966, 
   1970, 1974, 1978, 1982, 1986, 1990, 1994, 1998, 2002, 2006, 
   2010, 2014, 2018, 2022, 2026
 ];
 
+// Stage index mapping labels
 const stageNames = {
-  0: 'Did Not Participate', 1: 'Group Stage', 2: 'Round of 16', 
-  3: 'Quarter-finals', 4: 'Semi-finals', 5: 'Runners-up', 6: 'Champions'
+  0: 'Did Not Participate',
+  1: 'Group Stage',
+  2: 'Round of 16 / Second Group Stage',
+  3: 'Quarter-finals',
+  4: 'Semi-finals / Third/Fourth Place',
+  5: 'Runners-up',
+  6: 'Champions'
 };
 
+/**
+ * 1. Setup & initialization routines
+ */
 document.addEventListener('DOMContentLoaded', () => {
-  buildTimelineYearButtons();
-  switchView('members', document.querySelector('.nav-btn'));
-  filterConfed('ALL', document.querySelector('.filter-btn'));
+  initApp();
 });
 
+function initApp() {
+  buildTimelineYearButtons();
+  
+  const initialNavBtn = document.querySelector('header nav button.active') || document.querySelector('.nav-btn');
+  const initialFilterBtn = document.querySelector('.filter-bar button.active') || document.querySelector('.filter-btn');
+  
+  switchView('members', initialNavBtn);
+  filterConfed('ALL', initialFilterBtn);
+}
+
+/**
+ * 2. View Switcher Framework
+ */
 function switchView(viewName, clickedButton) {
   currentView = viewName;
-  handleActiveHighlight('.nav-btn', clickedButton);
+  const membersSection = document.getElementById('members-view');
+  const yearsSection = document.getElementById('years-view');
 
   if (viewName === 'members') {
-    document.getElementById('members-view').classList.remove('hidden');
-    document.getElementById('years-view').classList.add('hidden');
+    if (membersSection) membersSection.classList.remove('hidden');
+    if (yearsSection) yearsSection.classList.add('hidden');
   } else {
-    document.getElementById('years-view').classList.remove('hidden');
-    document.getElementById('members-view').classList.add('hidden');
-    if (!activeSelectedYear) {
-      const btn74 = Array.from(document.querySelectorAll('.year-btn')).find(b => b.innerText === '1974');
-      if (btn74) btn74.click();
-    }
+    if (yearsSection) yearsSection.classList.remove('hidden');
+    if (membersSection) membersSection.classList.add('hidden');
   }
+
+  let targetNavBtn = clickedButton;
+  if (!targetNavBtn) {
+    targetNavBtn = Array.from(document.querySelectorAll('header nav button, .nav-btn')).find(
+      btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${viewName}'`)
+    );
+  }
+  handleActiveHighlight('header nav button, .nav-btn', targetNavBtn);
+}
+
+/**
+ * 3. Sorting & Rendering Logic - Members View
+ */
+function getSortedCountryKeys(keysArray) {
+  return [...keysArray].sort((a, b) => {
+    const nameA = (wcData.countries[a]?.name || '').toLowerCase();
+    const nameB = (wcData.countries[b]?.name || '').toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
 }
 
 function filterConfed(confedCode, clickedButton) {
   activeConfedFilter = confedCode;
-  handleActiveHighlight('.filter-btn', clickedButton);
+  handleActiveHighlight('.filter-bar button, .filter-btn', clickedButton);
 
-  const grid = document.getElementById('flag-grid');
-  if (!grid) return;
-  
-  // Explicit grid formatting layout fix directly on the parent DOM container
-  grid.innerHTML = '';
-  grid.style.display = 'grid';
-  grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(130px, 1fr))';
-  grid.style.gap = '16px';
-  grid.style.padding = '20px 0';
+  const gridElement = document.getElementById('flag-grid');
+  if (!gridElement) return;
+  gridElement.innerHTML = '';
 
   let targetKeys = Object.keys(wcData.countries);
   if (confedCode !== 'ALL') {
-    targetKeys = targetKeys.filter(k => wcData.countries[k].confed === confedCode);
+    targetKeys = targetKeys.filter(key => wcData.countries[key]?.confed === confedCode);
   }
 
-  targetKeys.sort((a,b) => wcData.countries[a].name.localeCompare(wcData.countries[b].name));
+  // Force strict absolute alphabetical sorting across all categories by name string
+  const sortedKeys = getSortedCountryKeys(targetKeys);
 
-  targetKeys.forEach(key => {
-    grid.appendChild(createCardElement(key));
+  sortedKeys.forEach(key => {
+    const country = wcData.countries[key];
+    const card = document.createElement('div');
+    card.className = 'flag-card';
+    card.onclick = () => openCountryModal(key);
+
+    card.innerHTML = `
+      <span class="flag-icon fi fi-${country.flag}"></span>
+      <div class="flag-country-name">${country.name}</div>
+    `;
+    gridElement.appendChild(card);
   });
 }
 
-function createCardElement(key, year = null) {
-  const country = wcData.countries[key];
-  const card = document.createElement('div');
-  card.className = 'flag-card';
-  
-  // Inline layout safety fallback configuration to build structured uniform cards
-  card.style.display = 'flex';
-  card.style.flexDirection = 'column';
-  card.style.alignItems = 'center';
-  card.style.textAlign = 'center';
-  card.style.padding = '12px 8px';
-  card.style.border = '1px solid #333';
-  card.style.borderRadius = '6px';
-  card.style.background = '#1a1a1a';
-  card.style.cursor = 'pointer';
-  card.style.transition = 'transform 0.15s ease';
-
-  card.onmouseenter = () => card.style.transform = 'scale(1.04)';
-  card.onmouseleave = () => card.style.transform = 'scale(1.0)';
-  card.onclick = () => openCountryModal(key);
-
-  let displayName = country.name;
-  if (year && country.notes && country.notes[year]) {
-    displayName = `${country.name} (${country.notes[year]})`;
-  }
-
-  card.innerHTML = `
-    <span class="flag-icon fi fi-${country.flag}" style="font-size: 1.5rem; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></span>
-    <div class="flag-country-name" style="color: #fff; font-size: 0.85rem; font-weight: 500; line-height: 1.2;">${displayName}</div>
-  `;
-  return card;
-}
-
+/**
+ * 4. Sorting & Rendering Logic - Timeline View
+ */
 function buildTimelineYearButtons() {
   const container = document.getElementById('years-buttons');
   if (!container) return;
@@ -367,23 +378,52 @@ function buildTimelineYearButtons() {
 
     if (year === 1942 || year === 1946) {
       button.classList.add('cancelled');
+      button.title = `The ${year} tournament was cancelled due to World War II.`;
     } else {
-      button.onclick = () => {
-        activeSelectedYear = year;
-        handleActiveHighlight('.year-btn', button);
-        document.getElementById('year-details').classList.remove('hidden');
-        document.getElementById('selected-year-title').innerText = `🏆 ${year} Tournament Participants`;
-        renderYearParticipants(year);
-      };
+      button.onclick = () => showYearDetails(year, button);
     }
+
     container.appendChild(button);
   });
 }
 
 function switchTimelineSubView(subView, clickedButton) {
   currentTimelineSubView = subView;
-  handleActiveHighlight('.timeline-tabs button', clickedButton);
-  if (activeSelectedYear) renderYearParticipants(activeSelectedYear);
+  
+  // Dynamically query your timeline presentation control buttons
+  const subViewButtons = document.querySelectorAll('.timeline-tabs button, #timeline-sub-navigation button');
+  
+  // Clean up all active highlights within the timeline nav bar subset
+  subViewButtons.forEach(btn => btn.classList.remove('active'));
+  
+  // Highlight the specifically clicked button to retain its illumination visual state
+  if (clickedButton) {
+    clickedButton.classList.add('active');
+  } else {
+    // Graceful fallback tracker if called without an event context
+    const fallbackId = subView === 'alpha' ? 'tab-timeline-alpha' : (subView === 'confed' ? 'tab-timeline-confed' : 'tab-timeline-third');
+    const fallbackBtn = document.getElementById(fallbackId);
+    if (fallbackBtn) fallbackBtn.classList.add('active');
+  }
+
+  if (activeSelectedYear) {
+    renderYearParticipants(activeSelectedYear);
+  }
+}
+
+function showYearDetails(year, clickedButton) {
+  activeSelectedYear = year;
+  handleActiveHighlight('#years-buttons .year-btn', clickedButton);
+
+  const detailsSection = document.getElementById('year-details');
+  const titleElement = document.getElementById('selected-year-title');
+  
+  if (!detailsSection || !titleElement) return;
+  
+  titleElement.innerText = `🏆 ${year} Tournament Participants`;
+  detailsSection.classList.remove('hidden');
+
+  renderYearParticipants(year);
 }
 
 function renderYearParticipants(year) {
@@ -391,156 +431,162 @@ function renderYearParticipants(year) {
   if (!container) return;
   container.innerHTML = '';
 
-  const keys = Object.keys(wcData.countries).filter(k => wcData.countries[k].history[year] !== undefined);
+  // Extract keys dynamically by finding matching indices inside country history logs
+  const participantKeys = Object.keys(wcData.countries).filter(key => {
+    return wcData.countries[key].history && wcData.countries[key].history[year] !== undefined;
+  });
+
+  if (participantKeys.length === 0) {
+    container.innerHTML = '<p class="text-muted">No participant data recorded for this tournament year.</p>';
+    return;
+  }
 
   if (currentTimelineSubView === 'alpha') {
+    // Mode A: Render absolute alphabetical sorting grid across all participants
     container.className = 'flag-grid';
-    container.style.display = 'grid';
-    container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(130px, 1fr))';
-    container.style.gap = '16px';
+    const sortedKeys = getSortedCountryKeys(participantKeys);
     
-    keys.sort((a,b) => wcData.countries[a].name.localeCompare(wcData.countries[b].name));
-    keys.forEach(k => container.appendChild(createCardElement(k, year)));
+    sortedKeys.forEach(key => {
+      container.appendChild(createParticipantCard(key, year));
+    });
 
   } else if (currentTimelineSubView === 'confed') {
-    container.className = 'confed-container';
-    ['UEFA', 'CONMEBOL', 'CONCACAF', 'CAF', 'AFC', 'OFC'].forEach(c => {
-      const confedKeys = keys.filter(k => wcData.countries[k].confed === c);
+    // Mode B: Split elements vertically by geographical confederation grouping rows stacked downward
+    container.className = 'confed-timeline-container';
+    
+    const confedOrder = ['UEFA', 'CONMEBOL', 'CONCACAF', 'CAF', 'AFC', 'OFC'];
+    
+    confedOrder.forEach(confed => {
+      const confedKeys = participantKeys.filter(key => wcData.countries[key]?.confed === confed);
       if (confedKeys.length === 0) return;
 
-      const title = document.createElement('h3');
-      title.style.cssText = "color:#fff; margin: 20px 0 10px 0;";
-      title.innerText = `${c} (${confedKeys.length})`;
-      container.appendChild(title);
+      const sortedConfedKeys = getSortedCountryKeys(confedKeys);
+
+      const groupBlock = document.createElement('div');
+      groupBlock.className = 'confed-group-block';
+      groupBlock.innerHTML = `<h3 class="confed-group-title">${confed} <span class="text-muted">(${sortedConfedKeys.length})</span></h3>`;
 
       const subGrid = document.createElement('div');
       subGrid.className = 'flag-grid';
-      subGrid.style.display = 'grid';
-      subGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(130px, 1fr))';
-      subGrid.style.gap = '16px';
 
-      confedKeys.sort((a,b) => wcData.countries[a].name.localeCompare(wcData.countries[b].name));
-      confedKeys.forEach(k => subGrid.appendChild(createCardElement(k, year)));
-      container.appendChild(subGrid);
+      sortedConfedKeys.forEach(key => {
+        subGrid.appendChild(createParticipantCard(key, year));
+      });
+
+      groupBlock.appendChild(subGrid);
+      container.appendChild(groupBlock);
     });
-
-  } else if (currentTimelineSubView === 'group') {
-    container.className = 'group-stage-container';
-    if (year === 1934 || year === 1938) {
-      container.innerHTML = `<p class="text-muted" style="padding:20px;">No group stage matches held in ${year}.</p>`;
-      return;
-    }
-    renderGroupTables(container, year);
+  } else {
+    // Mode C: Placeholder execution template for your new sub-view filter option
+    container.className = 'flag-grid';
+    container.innerHTML = '<p class="text-muted">Custom layout view logic content will populate here.</p>';
   }
 }
 
-function renderGroupTables(container, year) {
-  const mock1974 = [
-    {
-      phaseTitle: "First Round Group Stage",
-      groups: [
-        { name: "Group 1", teams: [
-          { name: "East Germany", flag: "de", pld: 3, w: 2, d: 1, l: 0, gf: 4, ga: 1, gd: 3, pts: 5 }, 
-          { name: "West Germany", flag: "de", pld: 3, w: 2, d: 0, l: 1, gf: 4, ga: 1, gd: 3, pts: 4 },
-          { name: "Chile", flag: "cl", pld: 3, w: 0, d: 2, l: 1, gf: 1, ga: 2, gd: -1, pts: 2 },
-          { name: "Australia", flag: "au", pld: 3, w: 0, d: 1, l: 2, gf: 0, ga: 5, gd: -5, pts: 1 }
-        ] },
-        { name: "Group 2", teams: [
-          { name: "Yugoslavia", flag: "rs", pld: 3, w: 1, d: 2, l: 0, gf: 10, ga: 1, gd: 9, pts: 4 }, 
-          { name: "Brazil", flag: "br", pld: 3, w: 1, d: 2, l: 0, gf: 3, ga: 0, gd: 3, pts: 4 },
-          { name: "Scotland", flag: "gb-sct", pld: 3, w: 1, d: 2, l: 0, gf: 3, ga: 1, gd: 2, pts: 4 },
-          { name: "Zaire", flag: "cd", pld: 3, w: 0, d: 0, l: 3, gf: 0, ga: 14, gd: -14, pts: 0 }
-        ] }
-      ]
-    }
-  ];
+function createParticipantCard(key, year) {
+  const country = wcData.countries[key];
+  const card = document.createElement('div');
+  card.className = 'flag-card';
+  card.onclick = () => openCountryModal(key);
+  
+  let displayName = country.name;
+  if (country.notes && country.notes[year] && key !== "GDR") {
+    displayName = `${country.name} (${country.notes[year]})`;
+  }
 
-  mock1974.forEach(phase => {
-    const header = document.createElement('h3');
-    header.style.cssText = "color:#0070f3; margin: 25px 0 10px 0;";
-    header.innerText = phase.phaseTitle;
-    container.appendChild(header);
-
-    phase.groups.forEach(g => {
-      const div = document.createElement('div');
-      div.style.marginBottom = "20px";
-      div.innerHTML = `<h4 style="color:#fff; margin-bottom:8px;">${g.name}</h4>
-        <table class="wiki-standing-table">
-          <thead>
-            <tr><th>Pos</th><th style="text-align:left;">Team</th><th>Pld</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr>
-          </thead>
-          <tbody>
-            ${g.teams.map((t, i) => `
-              <tr class="${i < 2 ? 'advance-row' : ''}">
-                <td style="text-align:center; font-weight:bold;">${i+1}</td>
-                <td><span class="flag-icon fi fi-${t.flag}" style="margin-right:8px;"></span>${t.name}</td>
-                <td style="text-align:center;">${t.pld}</td><td style="text-align:center;">${t.w}</td>
-                <td style="text-align:center;">${t.d}</td><td style="text-align:center;">${t.l}</td>
-                <td style="text-align:center;">${t.gf}</td><td style="text-align:center;">${t.ga}</td>
-                <td style="text-align:center;">${t.gd > 0 ? '+' : ''}${t.gd}</td><td style="text-align:center; font-weight:bold;">${t.pts}</td>
-              </tr>`).join('')}
-          </tbody>
-        </table>`;
-      container.appendChild(div);
-    });
-  });
+  card.innerHTML = `
+    <span class="flag-icon fi fi-${country.flag}"></span>
+    <div class="flag-country-name">${displayName}</div>
+  `;
+  return card;
 }
+
+/**
+ * 5. Historical Analysis Modal Overlay & Charts
+ */
+let performanceChart = null;
 
 function openCountryModal(countryKey) {
   const country = wcData.countries[countryKey];
   if (!country) return;
 
   const modal = document.getElementById('chart-modal');
-  document.getElementById('modal-country-name').innerText = `${country.name} Performance History`;
+  const title = document.getElementById('modal-country-name');
+  const canvasContainer = document.querySelector('.chart-container');
+  const fallbackMsg = document.getElementById('fallback-msg') || createFallbackMsgElement();
+
+  if (!modal || !title) return;
+
+  title.innerText = `${country.name} Performance History`;
   modal.classList.remove('hidden');
 
-  const historyYears = Object.keys(country.history);
-  const canvas = document.getElementById('historyChart');
-
-  if (historyYears.length === 0) {
-    canvas.style.display = 'none';
-    let fallback = document.getElementById('modal-fallback');
-    if (!fallback) {
-      fallback = document.createElement('p');
-      fallback.id = 'modal-fallback';
-      fallback.style.cssText = "color:#8e8e93; text-align:center; padding-top:40px;";
-      canvas.parentNode.appendChild(fallback);
-    }
-    fallback.innerText = `${country.name} has not qualified for a final tournament grid stage.`;
+  const structuralHistory = Object.keys(country.history);
+  if (structuralHistory.length === 0) {
+    if (canvasContainer) canvasContainer.classList.add("hidden");
+    fallbackMsg.classList.remove("hidden");
+    fallbackMsg.innerText = `${country.name} has not participated in a World Cup final tournament.`;
     return;
   }
 
-  if (document.getElementById('modal-fallback')) {
-    document.getElementById('modal-fallback').remove();
+  if (canvasContainer) canvasContainer.classList.remove("hidden");
+  fallbackMsg.classList.add("hidden");
+
+  const chartData = allYears.map(year => {
+    if (year === 1942 || year === 1946) return null;
+    return country.history[year] !== undefined ? country.history[year] : 0;
+  });
+
+  if (performanceChart) {
+    performanceChart.destroy();
   }
-  canvas.style.display = 'block';
 
-  const chartData = allYears.map(y => country.history[y] !== undefined ? country.history[y] : 0);
+  const ctx = document.getElementById('historyChart').getContext('2d');
+  Chart.defaults.color = '#888888';
+  Chart.defaults.borderColor = '#2c2c2c';
 
-  if (performanceChart) performanceChart.destroy();
-  const ctx = canvas.getContext('2d');
-  
   performanceChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: allYears,
       datasets: [{
-        label: 'Stage Reached',
+        label: 'Finishing Stage',
         data: chartData,
         borderColor: '#0070f3',
-        backgroundColor: 'rgba(0,112,243,0.1)',
+        backgroundColor: 'rgba(0, 112, 243, 0.05)',
         pointBackgroundColor: '#0070f3',
-        tension: 0,
-        stepped: true
+        pointBorderColor: '#161616',
+        pointHoverBackgroundColor: '#fff',
+        pointRadius: 4,
+        stepped: true,
+        spanGaps: false
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
+        x: { grid: { display: false } },
         y: {
-          min: 0, max: 6,
-          ticks: { callback: function(val) { return stageNames[val]; } }
+          min: 0,
+          max: 6,
+          ticks: {
+            stepSize: 1,
+            callback: function(value) { return stageNames[value]; }
+          }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const year = context.label;
+              let labelText = `Stage: ${stageNames[context.raw]}`;
+              if (country.notes && country.notes[year] && context.raw > 0) {
+                labelText += ` (${country.notes[year]})`;
+              }
+              return labelText;
+            }
+          }
         }
       }
     }
@@ -548,11 +594,27 @@ function openCountryModal(countryKey) {
 }
 
 function closeModal() {
-  document.getElementById('chart-modal').classList.add('hidden');
+  const modal = document.getElementById('chart-modal');
+  if (modal) modal.classList.add('hidden');
 }
 
-function handleActiveHighlight(selector, element) {
-  if (!element) return;
-  document.querySelectorAll(selector).forEach(el => el.classList.remove('active'));
-  element.classList.add('active');
+function createFallbackMsgElement() {
+  const p = document.createElement('p');
+  p.id = 'fallback-msg';
+  p.className = 'text-muted';
+  p.style.textAlign = 'center';
+  p.style.padding = '20px';
+  const modalContent = document.querySelector('.modal-content');
+  if (modalContent) modalContent.appendChild(p);
+  return p;
+}
+
+/**
+ * 6. Global Utility Helpers
+ */
+function handleActiveHighlight(selectorGroup, activeElement) {
+  if (!activeElement) return;
+  const elements = document.querySelectorAll(selectorGroup);
+  elements.forEach(el => el.classList.remove('active'));
+  activeElement.classList.add('active');
 }
