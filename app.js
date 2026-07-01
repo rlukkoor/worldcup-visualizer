@@ -237,22 +237,32 @@ function switchView(viewName) {
     membersSection.classList.add('hidden');
   }
 
-  // Fallback structural finder for top switcher layout buttons
-  const targetNavBtn = Array.from(document.querySelectorAll('nav button, .nav-tabs button, .nav-btn')).find(
-    btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${viewName}'`)
-  );
-  handleActiveHighlight('nav button, .nav-tabs button, .nav-btn', targetNavBtn);
+  // Fallback structural finder for header navigation layout buttons
+  let targetNavBtn = null;
+  if (window.event && window.event.target && window.event.target.tagName === 'BUTTON') {
+    targetNavBtn = window.event.target;
+  } else {
+    targetNavBtn = Array.from(document.querySelectorAll('header nav button')).find(
+      btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${viewName}'`)
+    );
+  }
+  handleActiveHighlight('header nav button', targetNavBtn);
 }
 
 // 2. Confederation Filter with locked bar highlighting
 function filterConfed(confedCode) {
   activeConfedFilter = confedCode;
 
-  // Resilient query search tracking down the clicked filter item
-  const targetFilterBtn = Array.from(document.querySelectorAll('.filter-bar button, .filter-container button, .filter-btn')).find(
-    btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${confedCode}'`)
-  );
-  handleActiveHighlight('.filter-bar button, .filter-container button, .filter-btn', targetFilterBtn);
+  // Track down and isolate the specific filter button clicked within the bar container
+  let targetFilterBtn = null;
+  if (window.event && window.event.target && window.event.target.tagName === 'BUTTON') {
+    targetFilterBtn = window.event.target;
+  } else {
+    targetFilterBtn = Array.from(document.querySelectorAll('.filter-bar button')).find(
+      btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${confedCode}'`)
+    );
+  }
+  handleActiveHighlight('.filter-bar button', targetFilterBtn);
 
   const gridElement = document.getElementById('flag-grid');
   if (!gridElement) return;
@@ -290,7 +300,7 @@ function renderTimelineButtons() {
       button.classList.add('cancelled');
       button.title = `The ${year} tournament was cancelled due to World War II.`;
     } else {
-      button.onclick = () => showYearDetails(year, button);
+      button.onclick = (e) => showYearDetails(year, e.currentTarget);
     }
     container.appendChild(button);
   });
@@ -302,12 +312,12 @@ function showYearDetails(year, clickedButton) {
   const titleElement = document.getElementById('selected-year-title');
   const gridElement = document.getElementById('year-participants');
 
-  // Parse layout fallback matching dataset hooks if element context parameter is void
+  // Freeze focus state color context around the specific year badge clicked
   let targetBtn = clickedButton;
   if (!targetBtn) {
-    targetBtn = document.querySelector(`#years-buttons button[data-year="${year}"], .year-btn[data-year="${year}"]`);
+    targetBtn = document.querySelector(`#years-buttons button[data-year="${year}"]`);
   }
-  handleActiveHighlight('#years-buttons button, .year-btn', targetBtn);
+  handleActiveHighlight('#years-buttons button', targetBtn);
 
   gridElement.innerHTML = '';
 
