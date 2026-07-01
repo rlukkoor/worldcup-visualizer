@@ -3,271 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FIFA Member Associations Dashboard</title>
-  <!-- Chart.js for rendering historical stats -->
+  <title>FIFA World Cup Member Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Flag Icons CSS library -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.2/css/flag-icons.min.css" />
-  
-  <style>
-    :root {
-      --bg-color: #0b0b0b;
-      --card-bg: #161616;
-      --accent-blue: #0070f3;
-      --text-main: #ffffff;
-      --text-muted: #888888;
-      --border-color: #2c2c2c;
-    }
-
-    body {
-      margin: 0;
-      padding: 20px;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    h1, h2 {
-      margin-top: 0;
-      font-weight: 700;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* Top Navigation Tabs */
-    .nav-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 25px;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 15px;
-    }
-
-    .nav-btn {
-      background-color: var(--card-bg);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background-color 0.2s, border-color 0.2s;
-    }
-
-    .nav-btn:hover {
-      background-color: #222;
-      border-color: #444;
-    }
-
-    /* Filter Buttons */
-    .filter-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 25px;
-    }
-
-    .filter-btn {
-      background-color: #1a1a1a;
-      color: var(--text-muted);
-      border: 1px solid var(--border-color);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .filter-btn:hover {
-      color: var(--text-main);
-      background-color: #252525;
-    }
-
-    .filter-btn.active {
-      background-color: var(--accent-blue);
-      color: var(--text-main);
-      border-color: var(--accent-blue);
-    }
-
-    /* Flag Grid Layout */
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 16px;
-    }
-
-    .flag-card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .flag-card:hover {
-      transform: translateY(-2px);
-      border-color: #444;
-    }
-
-    .flag-icon {
-      font-size: 2rem;
-      display: block;
-      margin: 0 auto 10px auto;
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
-
-    .flag-country-name {
-      font-size: 0.85rem;
-      color: var(--text-main);
-      word-wrap: break-word;
-    }
-
-    /* Nice Black Timeline Buttons */
-    .timeline-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 30px;
-    }
-
-    .year-btn {
-      background-color: #111111;
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      min-width: 70px;
-    }
-
-    .year-btn:hover {
-      background-color: #222222;
-      border-color: var(--accent-blue);
-    }
-
-    .year-btn.cancelled {
-      background-color: #1a1212;
-      color: #553333;
-      border-color: #331a1a;
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    /* Modal Styling */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      width: 90%;
-      max-width: 700px;
-      padding: 24px;
-      position: relative;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 1.5rem;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-
-    .close-btn:hover {
-      color: var(--text-main);
-    }
-
-    .chart-container {
-      position: relative;
-      height: 350px;
-      width: 100%;
-      margin-top: 15px;
-    }
-
-    .text-muted {
-      color: var(--text-muted);
-    }
-  </style>
 </head>
 <body>
 
-  <h1>FIFA Member Associations</h1>
-
-  <!-- Navigation View Toggle Bar -->
-  <div class="nav-tabs">
-    <button onclick="switchView('members')" class="nav-btn">Associations Grid</button>
-    <button onclick="switchView('years')" class="nav-btn">Historical Timeline</button>
-  </div>
-
-  <!-- VIEW 1: Associations Grid (Matches your layout screenshot) -->
-  <div id="members-view">
-    <div class="filter-container">
-      <button class="filter-btn active" onclick="filterConfed('ALL')">All</button>
-      <button class="filter-btn" onclick="filterConfed('UEFA')">UEFA (Europe)</button>
-      <button class="filter-btn" onclick="filterConfed('CONMEBOL')">CONMEBOL (S. America)</button>
-      <button class="filter-btn" onclick="filterConfed('CONCACAF')">CONCACAF (N. America)</button>
-      <button class="filter-btn" onclick="filterConfed('CAF')">CAF (Africa)</button>
-      <button class="filter-btn" onclick="filterConfed('AFC')">AFC (Asia)</button>
-      <button class="filter-btn" onclick="filterConfed('OFC')">OFC (Oceania)</button>
+  <header>
+    <div class="header-container">
+      <h1>🌍 FIFA Member Dataset</h1>
+      <nav>
+        <button class="nav-btn active" onclick="switchView('members', this)">Members</button>
+        <button class="nav-btn" onclick="switchView('years', this)">Timeline</button>
+      </nav>
     </div>
+  </header>
 
-    <div id="flag-grid" class="grid-container">
-      <!-- Generated dynamically by app.js -->
-    </div>
-  </div>
-
-  <!-- VIEW 2: Historical Timeline (Reveals your black buttons) -->
-  <div id="years-view" class="hidden">
-    <h2>Tournament Records Timeline</h2>
-    <p class="text-muted" style="margin-bottom: 20px;">Select a tournament year to view all active participants.</p>
-    
-    <div id="years-buttons" class="timeline-container">
-      <!-- Nice black timeline buttons generated dynamically by app.js -->
-    </div>
-
-    <div id="year-details" class="hidden" style="margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px;">
-      <h3 id="selected-year-title">Tournament Participants</h3>
-      <div id="year-participants" class="grid-container" style="margin-top: 15px;">
-        <!-- Filtered participants generated dynamically by app.js -->
+  <main>
+    <section id="members-view">
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterConfed('ALL', this)">ALL</button>
+        <button class="filter-btn" onclick="filterConfed('UEFA', this)">UEFA</button>
+        <button class="filter-btn" onclick="filterConfed('CONMEBOL', this)">CONMEBOL</button>
+        <button class="filter-btn" onclick="filterConfed('CONCACAF', this)">CONCACAF</button>
+        <button class="filter-btn" onclick="filterConfed('CAF', this)">CAF</button>
+        <button class="filter-btn" onclick="filterConfed('AFC', this)">AFC</button>
+        <button class="filter-btn" onclick="filterConfed('OFC', this)">OFC</button>
       </div>
-    </div>
-  </div>
+      <div id="flag-grid" class="flag-grid"></div>
+    </section>
 
-  <!-- Shared History Chart Pop-up Modal -->
-  <div id="chart-modal" class="modal hidden">
+    <section id="years-view" class="hidden">
+      <div id="years-buttons" class="years-buttons"></div>
+      
+      <div id="year-details" class="year-details hidden">
+        <h2 id="selected-year-title">🏆 Tournament Participants</h2>
+        <div id="year-participants" class="flag-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="chart-modal" class="modal hidden" onclick="if(event.target === this) closeModal()">
     <div class="modal-content">
-      <button class="close-btn" onclick="closeModal()">&times;</button>
-      <h3 id="modal-country-name">Country Performance</h3>
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="modal-country-name">Country Performance History</h2>
       <div class="chart-container">
         <canvas id="historyChart"></canvas>
       </div>
     </div>
   </div>
 
-  <!-- Link your data script -->
   <script src="app.js"></script>
 </body>
 </html>
