@@ -50,7 +50,7 @@ const wcData = {
     "HUN": { name: "Hungary", flag: "hu", confed: "UEFA", history: { 1934: 3, 1938: 5, 1954: 5, 1958: 1, 1962: 3, 1966: 3, 1978: 1, 1982: 1, 1986: 1 } },
     "ISL": { name: "Iceland", flag: "is", confed: "UEFA", history: { 2018: 1 } },
     "ISR": { name: "Israel", flag: "il", confed: "UEFA", history: { 1970: 1 }, notes: { 1970: "Qualified via AFC allocation" } },
-    "ITA": { name: "Italy", flag: "it", confed: "UEFA", history: { 1934: 6, 1938: 6, 1950: 1, 1954: 1, 1962: 1, 1966: 1, 1970: 5, 1974: 1, 1978: 4, 1982: 6, 1986: 2, 1990: 4, 1994: 5, 1998: 3, 2002: 2, 2006: 6, 2010: 1, 2014: 1 } }, // Fixed historical data exclusion
+    "ITA": { name: "Italy", flag: "it", confed: "UEFA", history: { 1934: 6, 1938: 6, 1950: 1, 1954: 1, 1962: 1, 1966: 1, 1970: 5, 1974: 1, 1978: 4, 1982: 6, 1986: 2, 1990: 4, 1994: 5, 1998: 3, 2002: 2, 2006: 6, 2010: 1, 2014: 1 } },
     "KAZ": { name: "Kazakhstan", flag: "kz", confed: "UEFA", history: {} },
     "KOS": { name: "Kosovo", flag: "xk", confed: "UEFA", history: {} },
     "LVA": { name: "Latvia", flag: "lv", confed: "UEFA", history: {} },
@@ -139,7 +139,7 @@ const wcData = {
     "SXM": { name: "Sint Maarten", flag: "sx", confed: "CONCACAF", history: {} },
     "SUR": { name: "Suriname", flag: "sr", confed: "CONCACAF", history: {} },
     "TRI": { name: "Trinidad and Tobago", flag: "tt", confed: "CONCACAF", history: { 2006: 1 } },
-    "TCA": { name: "Turks and Caican Islands", flag: "tc", confed: "CONCACAF", history: {} },
+    "TCA": { name: "Turks and Caicos Islands", flag: "tc", confed: "CONCACAF", history: {} },
     "USA": { name: "United States", flag: "us", confed: "CONCACAF", history: { 1930: 4, 1934: 1, 1950: 1, 1990: 1, 1994: 2, 1998: 1, 2002: 3, 2006: 1, 2010: 2, 2014: 2, 2022: 2, 2026: 1 } },
     "VIR": { name: "US Virgin Islands", flag: "vi", confed: "CONCACAF", history: {} },
 
@@ -233,7 +233,7 @@ const wcData = {
     "PLE": { name: "Palestine", flag: "ps", confed: "AFC", history: {} },
     "PHI": { name: "Philippines", flag: "ph", confed: "AFC", history: {} },
     "QAT": { name: "Qatar", flag: "qa", confed: "AFC", history: { 2022: 1 } },
-    "KSA": { name: "Saudi Arabia", flag: "sa", confed: "AFC", history: { 1994: 2, 1998: 1, 2002: 1, 2006: 1, 2018: 1, 2022: 1, 2026: 1 } }, // Maintained fixed inclusion
+    "KSA": { name: "Saudi Arabia", flag: "sa", confed: "AFC", history: { 1994: 2, 1998: 1, 2002: 1, 2006: 1, 2018: 1, 2022: 1, 2026: 1 } },
     "SGP": { name: "Singapore", flag: "sg", confed: "AFC", history: {} },
     "SRI": { name: "Sri Lanka", flag: "lk", confed: "AFC", history: {} },
     "SYR": { name: "Syria", flag: "sy", confed: "AFC", history: {} },
@@ -302,7 +302,13 @@ function filterConfed(confedCode, clickedButton) {
 
   const grid = document.getElementById('flag-grid');
   if (!grid) return;
+  
+  // Explicit grid formatting layout fix directly on the parent DOM container
   grid.innerHTML = '';
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(130px, 1fr))';
+  grid.style.gap = '16px';
+  grid.style.padding = '20px 0';
 
   let targetKeys = Object.keys(wcData.countries);
   if (confedCode !== 'ALL') {
@@ -321,7 +327,20 @@ function createCardElement(key, year = null) {
   const card = document.createElement('div');
   card.className = 'flag-card';
   
-  // click interaction linked straight to chart history view
+  // Inline layout safety fallback configuration to build structured uniform cards
+  card.style.display = 'flex';
+  card.style.flexDirection = 'column';
+  card.style.alignItems = 'center';
+  card.style.textAlign = 'center';
+  card.style.padding = '12px 8px';
+  card.style.border = '1px solid #333';
+  card.style.borderRadius = '6px';
+  card.style.background = '#1a1a1a';
+  card.style.cursor = 'pointer';
+  card.style.transition = 'transform 0.15s ease';
+
+  card.onmouseenter = () => card.style.transform = 'scale(1.04)';
+  card.onmouseleave = () => card.style.transform = 'scale(1.0)';
   card.onclick = () => openCountryModal(key);
 
   let displayName = country.name;
@@ -330,8 +349,8 @@ function createCardElement(key, year = null) {
   }
 
   card.innerHTML = `
-    <span class="flag-icon fi fi-${country.flag}"></span>
-    <div class="flag-country-name">${displayName}</div>
+    <span class="flag-icon fi fi-${country.flag}" style="font-size: 1.5rem; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></span>
+    <div class="flag-country-name" style="color: #fff; font-size: 0.85rem; font-weight: 500; line-height: 1.2;">${displayName}</div>
   `;
   return card;
 }
@@ -376,6 +395,10 @@ function renderYearParticipants(year) {
 
   if (currentTimelineSubView === 'alpha') {
     container.className = 'flag-grid';
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(130px, 1fr))';
+    container.style.gap = '16px';
+    
     keys.sort((a,b) => wcData.countries[a].name.localeCompare(wcData.countries[b].name));
     keys.forEach(k => container.appendChild(createCardElement(k, year)));
 
@@ -392,6 +415,10 @@ function renderYearParticipants(year) {
 
       const subGrid = document.createElement('div');
       subGrid.className = 'flag-grid';
+      subGrid.style.display = 'grid';
+      subGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(130px, 1fr))';
+      subGrid.style.gap = '16px';
+
       confedKeys.sort((a,b) => wcData.countries[a].name.localeCompare(wcData.countries[b].name));
       confedKeys.forEach(k => subGrid.appendChild(createCardElement(k, year)));
       container.appendChild(subGrid);
@@ -408,7 +435,6 @@ function renderYearParticipants(year) {
 }
 
 function renderGroupTables(container, year) {
-  // Built out for explicit 1974 historical mapping shown in screenshots
   const mock1974 = [
     {
       phaseTitle: "First Round Group Stage",
